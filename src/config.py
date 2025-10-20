@@ -2,7 +2,7 @@
 Application configuration module.
 Handles environment variables and application settings.
 """
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List
 
 
@@ -36,9 +36,10 @@ class Settings(BaseSettings):
     # CORS
     allowed_origins: List[str] = ["http://localhost:3000", "http://localhost:8000"]
     
-    class Config:
-        env_file = ".env"
-        case_sensitive = False
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        case_sensitive=False
+    )
 
 
 # Create settings instance

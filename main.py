@@ -4,19 +4,28 @@ Task Tracker API with authentication and CRUD operations for tasks.
 """
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
 from src.config import settings
 from src.routes import tasks, auth
 from src.database.connection import Base, engine
 
-# Create database tables
-Base.metadata.create_all(bind=engine)
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Lifespan event handler for startup and shutdown."""
+    # Create database tables on startup
+    Base.metadata.create_all(bind=engine)
+    yield
+    # Cleanup on shutdown (if needed)
+
 
 # Create FastAPI app
 app = FastAPI(
     title=settings.app_name,
     version=settings.app_version,
     debug=settings.debug,
-    description="A task tracker API with FastAPI, PostgreSQL, and JWT authentication"
+    description="A task tracker API with FastAPI, PostgreSQL, and JWT authentication",
+    lifespan=lifespan
 )
 
 # Configure CORS

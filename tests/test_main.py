@@ -28,7 +28,8 @@ def override_get_db():
 
 app.dependency_overrides[get_db] = override_get_db
 
-client = TestClient(app)
+# Use TestClient without entering lifespan context (since we're using SQLite)
+client = TestClient(app, backend_options={"use_uvloop": False})
 
 
 def test_root():

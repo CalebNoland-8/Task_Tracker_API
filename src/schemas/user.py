@@ -1,7 +1,7 @@
 """
 Pydantic schemas for User validation and serialization.
 """
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
 from typing import Optional
 from datetime import datetime
 
@@ -32,8 +32,7 @@ class UserResponse(UserBase):
     created_at: datetime
     updated_at: Optional[datetime] = None
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserLogin(BaseModel):
